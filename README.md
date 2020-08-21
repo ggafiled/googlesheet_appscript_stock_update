@@ -9,6 +9,8 @@
 
 ### Overall
 ตัวอย่างภาพหน้าจอการใช้งานระบบงาน
+![Main Panel UI]("https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/sql_over_partition_split_by_appid_and_leftjoin.PNG")
+![Main Panel UI]("https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/sql_over_partition_split_by_appid_and_leftjoin02.PNG")
 
 ### License
 GNU
