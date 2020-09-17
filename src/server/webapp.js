@@ -4,22 +4,32 @@ function cmdTerraUpdate() {
   global.calSummary();
 }
 
-function cmdTerraCritical(replyToken) {
+function cmdTerraCritical(replyToken, productname) {
   Logger.log('[cmdTerraCritical()] : starting function.');
-  const Quintus = Tamotsu.Table.define({
-    sheetName: 'Quintus',
-  });
+  const product = productname.trim().split('p:');
+  Logger.log(`[cmdTerraCritical()] : product name ${product[1]}`);
+  if (product.length > 0) {
+    const Quintus = Tamotsu.Table.define({
+      sheetName: 'Quintus',
+      rowShift: 2,
+      columnShift: 0,
+    });
 
-  const productAmount = Quintus.where({
-    products: 'IFCCC 120F',
-  })
-    .all()
-    .sum('amount');
-  Logger.log(`[cmdTerraCritical()] : Model ${JSON.stringify(Quintus.first())}`);
-  replyMessage(
-    replyToken,
-    `*ตอบกลับ:* terra 🍟 ทำการเช็คจำนวนที่คลัง Quintus แล้วค่ะ \n รายการอุปกรณ์ [IFCCC 120F] มีจำนวนคงเหลือ คือ ${productAmount} ชิ้น.`
-  );
+    let sum = 0;
+
+    const productAmount = Quintus.where({
+      products: product[1],
+    })
+      .all()
+      .forEach((doc) => {
+        sum += Number(doc.amount);
+      });
+    Logger.log(`[cmdTerraCritical()] : Model ${JSON.stringify(productAmount)}`);
+    replyMessage(
+      replyToken,
+      `*ตอบกลับ:* terra 🍟 ทำการเช็คจำนวนที่คลัง Quintus แล้วค่ะ \n รายการอุปกรณ์  [${product[1]}]  มีจำนวนคงเหลือ คือ ${sum} ชิ้น.`
+    );
+  }
 }
 
 const doPost = (e) => {
@@ -42,7 +52,7 @@ const doPost = (e) => {
         break;
       case 'critical':
         Logger.log('[doPost()] : switch case [critical] it working.');
-        cmdTerraCritical(data.events[0].replyToken);
+        cmdTerraCritical(data.events[0].replyToken, data.events[0].message.text);
         break;
       default:
         Logger.log('[doPost()] : switch case [default] it working.');
