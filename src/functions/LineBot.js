@@ -7,7 +7,7 @@ const {
 const LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify';
 const LINE_MESSAGE_REPLY_URL = 'https://api.line.me/v2/bot/message/reply';
 const LINE_NOTIFY_TOKEN = getDataFromRange("StoreData", "B5");
-const LINE_CHANEL_ACCESS_TOKEN = 'A3rXfbdN5Gd14VKGGoIMfFoZJ22PN5Lwyq3C96gffzaMXB306+1ww9dQvpO1eVJJvcIVDvTovduIGO84+9/tU/fbruxmjoFozEtOkqT7JyDYzASMy6NdRDBzNxvnXg2ODchP4XYsrzWzmI/9x6NqfAdB04t89/1O/w1cDnyilFU=';
+const LINE_CHANEL_ACCESS_TOKEN = 'nauWk1Gl7j1ciytz48ceFtcyNqPkp99Yr004Xg/qmiHVvuiUE4hBAbUH87Mi6hwyvcIVDvTovduIGO84+9/tU/fbruxmjoFozEtOkqT7JyDAlgvQM3+0fZZfhFWvsDgY43zsyAcq790EBAPlsU02EwdB04t89/1O/w1cDnyilFU=';
 
 function sendLineNotify() {
 

@@ -4,32 +4,28 @@ function cmdTerraUpdate() {
   global.calSummary();
 }
 
-function cmdTerraCritical(replyToken, productname) {
+async function findCriticalProducts() {
+  let productList = '';
+  const store = SpreadsheetApp.getActive().getSheetByName('Summary');
+  const document = store.getRange(`B4:Q${store.getLastRow()}`).getValues();
+
+  await document.forEach((row) => {
+    if (Number(row[8]) < Number(row[4]) && String(row[0]).trim() !== '') {
+      productList = `${productList + row[0]}\n`;
+    }
+  });
+
+  return productList;
+}
+
+async function cmdTerraCritical(replyToken) {
   Logger.log('[cmdTerraCritical()] : starting function.');
-  const product = productname.trim().split('p:');
-  Logger.log(`[cmdTerraCritical()] : product name ${product[1]}`);
-  if (product.length > 0) {
-    const Quintus = Tamotsu.Table.define({
-      sheetName: 'Quintus',
-      rowShift: 2,
-      columnShift: 0,
-    });
-
-    let sum = 0;
-
-    const productAmount = Quintus.where({
-      products: product[1],
-    })
-      .all()
-      .forEach((doc) => {
-        sum += Number(doc.amount);
-      });
-    Logger.log(`[cmdTerraCritical()] : Model ${JSON.stringify(productAmount)}`);
-    replyMessage(
-      replyToken,
-      `*ตอบกลับ:* terra 🍟 ทำการเช็คจำนวนที่คลัง Quintus แล้วค่ะ \n รายการอุปกรณ์  [${product[1]}]  มีจำนวนคงเหลือ คือ ${sum} ชิ้น.`
-    );
-  }
+  const productList = await findCriticalProducts();
+  Logger.log(`[cmdTerraCritical()] : Model ${JSON.stringify(productList)}`);
+  replyMessage(
+    replyToken,
+    `*ตอบกลับ:* terra 🍟 ทำการเช็คจำนวนคงเหลือที่คลังแล้วค่ะ \n รายการอุปกรณ์ที่กำลังวิกฤต มีดังต่อไปนี้. \n${productList}`
+  );
 }
 
 const doPost = (e) => {
@@ -52,7 +48,7 @@ const doPost = (e) => {
         break;
       case 'critical':
         Logger.log('[doPost()] : switch case [critical] it working.');
-        cmdTerraCritical(data.events[0].replyToken, data.events[0].message.text);
+        cmdTerraCritical(data.events[0].replyToken);
         break;
       default:
         Logger.log('[doPost()] : switch case [default] it working.');
@@ -62,14 +58,14 @@ const doPost = (e) => {
       JSON.stringify({
         status: 'ok',
       })
-    );
+    ).setMimeType(ContentService.JSON);
   }
 
   return ContentService.createTextOutput(
     JSON.stringify({
       status: 'ok',
     })
-  );
+  ).setMimeType(ContentService.JSON);
 };
 
 module.exports = {
