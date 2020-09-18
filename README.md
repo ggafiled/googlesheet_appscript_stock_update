@@ -14,6 +14,8 @@
 ตัวอย่างภาพหน้าจอการใช้งานระบบงาน
 ![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_html_appscript_project_check_stock.PNG)
 ![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_html_appscript_project_check_stock02.PNG)
+![Terra Bot](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/terra-bot-01.jpg)
+![Terra Bot](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/terra-bot-02.jpg)
 
 ### License
 GNU
