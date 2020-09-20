@@ -8,6 +8,10 @@ const LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify';
 const LINE_MESSAGE_REPLY_URL = 'https://api.line.me/v2/bot/message/reply';
 const LINE_NOTIFY_TOKEN = getDataFromRange("StoreData", "B5");
 const LINE_CHANEL_ACCESS_TOKEN = 'nauWk1Gl7j1ciytz48ceFtcyNqPkp99Yr004Xg/qmiHVvuiUE4hBAbUH87Mi6hwyvcIVDvTovduIGO84+9/tU/fbruxmjoFozEtOkqT7JyDAlgvQM3+0fZZfhFWvsDgY43zsyAcq790EBAPlsU02EwdB04t89/1O/w1cDnyilFU=';
+const MESSAGE_TYPE = {
+    NORMAL: 'Normal',
+    QUICKREPLY: 'Quickreply'
+};
 
 function sendLineNotify() {
 
@@ -36,7 +40,35 @@ function sendLineNotify() {
     Logger.log("[sendLineNotify()] : response: " + response);
 }
 
-function replyMessage(replytoken, replyText) {
+function replyMessage(replytoken, replyText, type, items = []) {
+    try {
+        var response = UrlFetchApp.fetch(LINE_MESSAGE_REPLY_URL, replyMessageStructure(replytoken, replyText, type, items));
+    } catch (error) {
+        Logger.log(error.name + "：" + error.message);
+        return;
+    }
+
+    if (response.getResponseCode() === 200) {
+        Logger.log("[replyMessage()] Sending message completed.");
+    }
+}
+
+function replyMessageStructure(replytoken, replyText, type, items = []) {
+
+    let messages = null;
+    switch (type) {
+        case MESSAGE_TYPE.NORMAL:
+            messages = normalReplyMessage(replyText);
+            break;
+        case MESSAGE_TYPE.QUICKREPLY:
+            messages = quickReplyMessage(replyText, items);
+            break;
+        default:
+            messages = normalReplyMessage(replyText);
+            break;
+    }
+
+
     var lineHeader = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + LINE_CHANEL_ACCESS_TOKEN
@@ -44,10 +76,7 @@ function replyMessage(replytoken, replyText) {
 
     var postData = {
         "replyToken": replytoken,
-        "messages": [{
-            "type": "text",
-            "text": replyText
-        }]
+        "messages": messages
     };
 
     var options = {
@@ -56,21 +85,33 @@ function replyMessage(replytoken, replyText) {
         "payload": JSON.stringify(postData)
     };
 
-    try {
-        var response = UrlFetchApp.fetch(LINE_MESSAGE_REPLY_URL, options);
-    } catch (error) {
-        Logger.log(error.name + "：" + error.message);
-        return;
-    }
+    return options;
+}
 
-    if (response.getResponseCode() === 200) {
-        Logger.log("Sending message completed.");
-    }
+function normalReplyMessage(replyText) {
+    let normalStructure = [{
+        "type": "text",
+        "text": replyText
+    }];
+    return normalStructure;
+}
+
+function quickReplyMessage(title, items) {
+    let quickStructure = [{
+        "type": "text",
+        "text": title,
+        "quickReply": {
+            "items": items
+        }
+    }];
+
+    return quickStructure;
 }
 
 
 
 export {
     sendLineNotify,
-    replyMessage
+    replyMessage,
+    MESSAGE_TYPE
 };
