@@ -99,8 +99,8 @@ npm run deploy:prod
 ```
 
 # Overall 🍚🍣 (ตัวอย่างภาพรวม)
-### ตัวอย่างข้อมูลที่จะทำการค้นหา
-![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_appscript_stock_update_02.PNG)
+### ตัวอย่างการเก็บ Log ต่างๆ
+![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_html_appscript_project_check_stock02.PNG)
 ### ตัวอย่างหน้าจอการใช้งานคำสั่ง Chatbot 
 <table>
 <tr>
