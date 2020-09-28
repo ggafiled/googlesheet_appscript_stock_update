@@ -98,6 +98,7 @@ npm run deploy:prod
 
 ```
 
+<<<<<<< HEAD
 # Overall 🍚🍣 (ตัวอย่างภาพรวม)
 ### ตัวอย่างข้อมูลที่จะทำการค้นหา
 ![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_appscript_stock_update_02.PNG)
@@ -105,12 +106,15 @@ npm run deploy:prod
 <table>
 <tr>
   <td>
+  ตัวอย่างหน้าจอการใช้งานคำสั่ง Chatbot การใช้งานคำสั่ง `terra update`
     <img src="https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/terra-bot-01.jpg" alt="Terra Bot" width="340" height="480">
   </td>
   <td>
+  ตัวอย่างหน้าจอการใช้งานคำสั่ง Chatbot การใช้งานคำสั่ง `terra critical`
     <img src="https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/terra-bot-02.jpg" alt="Terra Bot" width="340" height="480">
   </td>
   <td>
+  ตัวอย่างหน้าจอการใช้งานคำสั่ง Chatbot การเอ่ยถึงแชทบอทที่มีคำว่า > terra ประกอบอยู่ด้วยจะแสดง quick reply กลับมา
     <img src="https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/terra-bot-03.jpg" alt="Terra Bot" width="340" height="480">
   </td>
 </tr>
