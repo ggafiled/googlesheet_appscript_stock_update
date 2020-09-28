@@ -4,10 +4,6 @@ const {
     isEmpty
 } = require("./utils.js");
 
-const LINE_NOTIFY_URL = 'https://notify-api.line.me/api/notify';
-const LINE_MESSAGE_REPLY_URL = 'https://api.line.me/v2/bot/message/reply';
-const LINE_NOTIFY_TOKEN = getDataFromRange("StoreData", "B5");
-const LINE_CHANEL_ACCESS_TOKEN = 'nauWk1Gl7j1ciytz48ceFtcyNqPkp99Yr004Xg/qmiHVvuiUE4hBAbUH87Mi6hwyvcIVDvTovduIGO84+9/tU/fbruxmjoFozEtOkqT7JyDAlgvQM3+0fZZfhFWvsDgY43zsyAcq790EBAPlsU02EwdB04t89/1O/w1cDnyilFU=';
 const MESSAGE_TYPE = {
     NORMAL: 'Normal',
     QUICKREPLY: 'Quickreply'
@@ -15,7 +11,7 @@ const MESSAGE_TYPE = {
 
 function sendLineNotify() {
 
-    if (String(LINE_NOTIFY_TOKEN).trim() == "") {
+    if (String(PropertiesService.getScriptProperties().getProperty('LINE_NOTIFY_TOKEN').toString()).trim() == "") {
         Logger.log("[sendLineNotify()] : empty line token.");
         return;
     }
@@ -31,18 +27,18 @@ function sendLineNotify() {
         'method': 'post',
         'contentType': 'application/x-www-form-urlencoded',
         "headers": {
-            "Authorization": "Bearer " + LINE_NOTIFY_TOKEN,
+            "Authorization": "Bearer " + PropertiesService.getScriptProperties().getProperty('LINE_NOTIFY_TOKEN').toString(),
         },
         'payload': formData
     };
 
-    let response = UrlFetchApp.fetch(LINE_NOTIFY_URL, options);
+    let response = UrlFetchApp.fetch(PropertiesService.getScriptProperties().getProperty('LINE_NOTIFY_URL').toString(), options);
     Logger.log("[sendLineNotify()] : response: " + response);
 }
 
 function replyMessage(replytoken, replyText, type, items = []) {
     try {
-        var response = UrlFetchApp.fetch(LINE_MESSAGE_REPLY_URL, replyMessageStructure(replytoken, replyText, type, items));
+        var response = UrlFetchApp.fetch(PropertiesService.getScriptProperties().getProperty('LINE_MESSAGE_REPLY_URL').toString(), replyMessageStructure(replytoken, replyText, type, items));
     } catch (error) {
         Logger.log(error.name + "：" + error.message);
         return;
@@ -71,7 +67,7 @@ function replyMessageStructure(replytoken, replyText, type, items = []) {
 
     var lineHeader = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + LINE_CHANEL_ACCESS_TOKEN
+        "Authorization": "Bearer " + PropertiesService.getScriptProperties().getProperty('LINE_CHANEL_ACCESS_TOKEN').toString()
     };
 
     var postData = {
