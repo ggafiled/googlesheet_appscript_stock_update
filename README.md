@@ -98,7 +98,6 @@ npm run deploy:prod
 
 ```
 
-<<<<<<< HEAD
 # Overall 🍚🍣 (ตัวอย่างภาพรวม)
 ### ตัวอย่างข้อมูลที่จะทำการค้นหา
 ![Main Panel UI](https://github.com/ggafiled/googlesheet_appscript_stock_update/blob/master/img/googlesheet_appscript_stock_update_02.PNG)
