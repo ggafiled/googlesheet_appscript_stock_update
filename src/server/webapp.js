@@ -85,6 +85,10 @@ const doPost = (e) => {
           Logger.log('[doPost()] : switch case [critical] it working.');
           cmdTerraCritical(data.events[0].replyToken);
           break;
+        case 'keyword':
+          //จะให้ทำอะไร
+          Logger.log('[doPost()] : switch case [critical] it working.');
+            break;
         default:
           Logger.log('[doPost()] : switch case [default] it working.');
           break;
