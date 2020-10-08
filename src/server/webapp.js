@@ -14,7 +14,8 @@ async function findCriticalProducts() {
   await document.forEach((row, index) => {
     if (Number(row[8]) < Number(row[4]) && String(row[0]).trim() !== '') {
       if (index !== document.length - 1) productList += '\n';
-      productList += row[0];
+      //เพิ่มส่วนที่ดึงมาจาก google sheet
+      productList += `${row[0]} ,${String(row[4])},${String(row[8])}`; 
     }
   });
 
@@ -85,10 +86,6 @@ const doPost = (e) => {
           Logger.log('[doPost()] : switch case [critical] it working.');
           cmdTerraCritical(data.events[0].replyToken);
           break;
-        case 'keyword':
-          //จะให้ทำอะไร
-          Logger.log('[doPost()] : switch case [critical] it working.');
-            break;
         default:
           Logger.log('[doPost()] : switch case [default] it working.');
           break;
