@@ -1,8 +1,20 @@
+const { render } = require('../functions/utils');
 const { replyMessage, MESSAGE_TYPE } = require('../functions/LineBot');
 
+const Route = {};
+Route.path = function (routeName, callback) {
+  Route[routeName] = callback;
+};
+
+function loadUi() {
+  return render('index', {
+    title: '- 🕵️‍♀️ Project List -',
+  });
+}
+
 function cmdTerraUpdate(replyToken) {
-  Logger.log('[cmdTerraUpdate()] : starting function.');
-  replyMessage(replyToken, '*ตอบกลับ:* terra 🍤 กำลังทำการอัพเดตสต็อคให้ค่ะ.', MESSAGE_TYPE.NORMAL);
+  Logger.log('[cmdfmstockUpdate()] : starting function.');
+  replyMessage(replyToken, 'กำลังทำการอัพเดตสต็อคให้ค่ะ.', MESSAGE_TYPE.NORMAL);
   global.calSummary();
 }
 
@@ -14,8 +26,7 @@ async function findCriticalProducts() {
   await document.forEach((row, index) => {
     if (Number(row[8]) < Number(row[4]) && String(row[0]).trim() !== '') {
       if (index !== document.length - 1) productList += '\n';
-      //เพิ่มส่วนที่ดึงมาจาก google sheet
-      productList += `${row[0]} ,${String(row[4])},${String(row[8])}`; 
+      productList += row[0];
     }
   });
 
@@ -28,7 +39,7 @@ async function cmdTerraCritical(replyToken) {
   Logger.log(`[cmdTerraCritical()] : Model ${JSON.stringify(productList)}`);
   replyMessage(
     replyToken,
-    `*ตอบกลับ:* terra 🍟 ทำการเช็คจำนวนคงเหลือที่คลังแล้วค่ะ \n รายการอุปกรณ์ที่กำลังวิกฤต มีดังต่อไปนี้. ${productList}`,
+    ` botStock กำลังทำการเช็คจำนวนคงเหลือที่คลังแล้วค่ะ \n รายการอุปกรณ์ที่กำลังวิกฤต มีดังต่อไปนี้. ${productList}`,
     MESSAGE_TYPE.NORMAL
   );
 }
@@ -42,7 +53,7 @@ function introduceBot(replyToken) {
       action: {
         type: 'message',
         label: 'อัพเดตสต็อค',
-        text: 'terra update',
+        text: 'fmstock update',
       },
     },
     {
@@ -52,19 +63,22 @@ function introduceBot(replyToken) {
       action: {
         type: 'message',
         label: 'ดูสินค้าที่มีจำนวนวิกฤต',
-        text: 'terra critical',
+        text: 'fmstock critical',
       },
     },
   ];
   replyMessage(
     replyToken,
-    '🙇‍♀️👩‍💻 ต้องการให้ terra ช่วยเหลืองานไหนเลือกคำสั่งด้านล่างได้เลยค่ะ .',
+    '🙇‍♀️👩‍💻 ต้องการให้ botStock ช่วยเหลืองานไหนเลือกคำสั่งด้านล่างได้เลยค่ะ .',
     MESSAGE_TYPE.QUICKREPLY,
     items
   );
 }
 
 const doPost = (e) => {
+  const fmCommandRegex = new RegExp(
+    /^(\bFM Stock\b)[\s]*([ก-๏a-zA-Z 0-9$&+,:;=?@#|'<>.^*()%!-/\\/]+)/i
+  );
   Logger.log('[doPost()] : starting function.');
   const data = JSON.parse(e.postData.contents);
   Logger.log(`[doPost()] after starting function: ${JSON.stringify(data)}`);
@@ -72,29 +86,34 @@ const doPost = (e) => {
   const lineTextdatas = data.events[0].message.text;
   Logger.log(`[doPost()] extract body data: ${lineTextdatas}`);
 
-  const lineTextdata = lineTextdatas.trim().split(' ');
+  const messages = data.events[0].message.text;
+  Logger.log(`[doPost()] messages: ${messages}`);
 
-  if (lineTextdata.length - 1 >= 1 && lineTextdata[0].toLowerCase() === 'terra') {
-    Logger.log(`[doPost()] : it in terra command. ${lineTextdata.length}`);
-    if (lineTextdata[1] !== null || lineTextdata[1] !== '') {
-      switch (lineTextdata[1].toLowerCase()) {
-        case 'update':
-          Logger.log('[doPost()] : switch case [update] it working.');
-          cmdTerraUpdate(data.events[0].replyToken);
-          break;
-        case 'critical':
-          Logger.log('[doPost()] : switch case [critical] it working.');
-          cmdTerraCritical(data.events[0].replyToken);
-          break;
-        default:
-          Logger.log('[doPost()] : switch case [default] it working.');
-          break;
-      }
-    } else {
-      Logger.log('[doPost()] : indexOf terra word it working.');
-      introduceBot(data.events[0].replyToken);
+  if (fmCommandRegex.test(messages.trim())) {
+    Logger.log(`[doPost()] fmCommandRegex.text : ${fmCommandRegex.test(messages.trim())}`);
+    Logger.log(`[doPost()] fmCommandRegex ${messages.trim().match(fmCommandRegex)}`);
+    switch (messages.trim().match(fmCommandRegex)[2].toLowerCase()) {
+      case 'search':
+        Logger.log(`[doPost()] List:`);
+        replyMessage(
+          data.events[0].replyToken,
+          'https://script.google.com/macros/s/AKfycbybBFKknefVAupamPEn8LEriWjNLO-owh-R0FPg9FZdzgkpj7UX/exec?v=project-list',
+          MESSAGE_TYPE.NORMAL
+        );
+        break;
+      case 'update':
+        Logger.log('[doPost()] : switch case [update] it working.');
+        cmdTerraUpdate(data.events[0].replyToken);
+        break;
+      case 'critical':
+        Logger.log('[doPost()] : switch case [critical] it working.');
+        cmdTerraCritical(data.events[0].replyToken);
+        break;
+      default:
+        Logger.log('[doPost()] : switch case [default] it working.');
+        break;
     }
-  } else if (lineTextdatas.toLowerCase().indexOf('terra') !== -1) {
+  } else if (lineTextdatas.toLowerCase().indexOf('fmstock') !== -1) {
     Logger.log('[doPost()] : indexOf terra word it working.');
     introduceBot(data.events[0].replyToken);
   }
@@ -106,6 +125,15 @@ const doPost = (e) => {
   ).setMimeType(ContentService.JSON);
 };
 
+const doGet = (e) => {
+  Route.path('project-list', loadUi);
+  if (Route[e.parameters.v]) {
+    return Route[e.parameters.v]();
+  }
+  return render('404');
+};
+
 module.exports = {
+  doGet,
   doPost,
 };

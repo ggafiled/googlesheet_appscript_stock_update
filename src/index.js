@@ -1,5 +1,6 @@
-import { doPost } from './server/webapp';
+import { doPost, doGet } from './server/webapp';
 import { calSummary, showUpdateForm } from './functions/StockManagement';
+import { filterByValue } from './functions/utils';
 
 // eslint-disable-next-line no-global-assign
 Logger = BetterLog.useSpreadsheet(
@@ -8,9 +9,11 @@ Logger = BetterLog.useSpreadsheet(
 Tamotsu.initialize();
 
 global.doPost = doPost;
+global.doGet = doGet;
 
 global.calSummary = calSummary;
 global.showUpdateForm = showUpdateForm;
+global.filterByValue = filterByValue;
 
 /* - createCustomUi: This function non-argument requried . It's will show custom menu on ribbon.-*/
 global.createCustomUi = () => {
