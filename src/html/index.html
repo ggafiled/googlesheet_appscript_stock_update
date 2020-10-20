@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/liff.js"></script>
+    <title>Index</title>
+</head>
+<style>
+    body {
+        margin-bottom: 25px;
+        font-family: 'Sarabun', sans-serif;
+    }
+    
+    td.details-control {
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    
+    tr.shown td.details-control {
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
+</style>
+
+<body>
+    </div>
+    <nav class="navbar navbar-expand-sm bg-white navbar-light">
+        <div class="mx-auto order-0">
+            <div class="d-flex flex-column">
+                <a class="navbar-brand mx-auto" href="#">
+                    <img src="https://www.blisstel.co.th/wp-content/uploads/2018/07/terra-e1531841401859.png" alt="Logo">
+                </a>
+                <h2>ทะเบียนติดตามสถานะการทำงาน</h2>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <table id="tabel1">
+        </table>
+    </div>
+</body>
+
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dataSet = [];
+        var table = null;
+
+        liff.init({
+            liffId: "1655032626-V4QkoRMZ"
+        }, () => {}, err => console.error(err.code, error.message));
+
+        function onSuccess(DataPass) {
+            console.log(JSON.parse(DataPass));
+            dataSet = JSON.parse(DataPass);
+
+            table = $('#tabel1').DataTable({
+                responsive: true,
+                data: dataSet,
+                columns: [{
+                    title: "Equipment list",
+                    data: 1
+                }, {
+                    title: "รหัสอุปกรณ์",
+                    data: 2,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "MinStock",
+                    data: 5,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "MinCW",
+                    data: 6,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "MinQT",
+                    data: 7,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "Changwattana",
+                    data: 10,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "Quintus",
+                    data: 11,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }, {
+                    title: "TotalStock",
+                    data: 9,
+                    render: function(data, type, row, meta) {
+                        return data === '' ?
+                            '-' : data;
+                    }
+                }]
+            });
+        }
+
+        google.script.run.withSuccessHandler(onSuccess)
+            .filterByValue();
+    });
+</script>

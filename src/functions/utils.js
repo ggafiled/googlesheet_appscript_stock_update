@@ -32,26 +32,27 @@ const render = (file, argsObject) => {
 
 const filterByValue = (string) => {
     Logger.log('[filterByValue()]: starting function.');
-    const Progress = Tamotsu.Table.define({
-        sheetName: 'Progress',
-        rowShift: 1,
-        columnShift: 0,
-    });
-    if (string) {
-        var finalarray = Progress.where((row) => {
-                return String(row['Project']).trim() !== '';
-            })
-            .all()
-            .filter((o) =>
-                Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(string.toLowerCase()))
-            );
-    } else {
-        var finalarray = Progress.where((row) => {
-            return String(row['Project']).trim() !== '';
-        }).all();
+    try {
+        var store = SpreadsheetApp.getActive().getSheetByName('Summary');
+        var document = store.getRange('A4:P' + store.getLastRow()).getValues();
+        Logger.log('[filterByValue()]: getDataFromRange.' + JSON.stringify(document));
+        var finalarray;
+        if (string) {
+            finalarray = document
+                .filter((row) => {
+                    return String(row[1]).trim() !== '' && String(row[0]).trim() === '';
+                })
+                .filter((o) =>
+                    Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(string.toLowerCase()))
+                );
+        } else {
+            finalarray = document.filter((row) => {
+                return String(row[1]).trim() !== '' && String(row[0]).trim() === '';
+            });
+        }
+    } catch (error) {
+        Logger.log('[filterByValue()]: error.' + error);
     }
-
-    // Logger.log("[filterByValue()]" + JSON.stringify(finalarray));
     return JSON.stringify(finalarray);
 };
 
